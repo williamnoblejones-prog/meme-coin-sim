@@ -19,10 +19,14 @@ def generate_hype_series():
 
     for t in range(TIME_STEPS):
         # random walk with slight decay
-        change = np.random.normal(0, 0.05)
-        hype = max(hype + change, 0.1)
+        #change = np.random.normal(0, 0.05)
+
         # for meme instead of walk:
-        # hype += np.random.normal(0, 0.08) - 0.01
+        if np.random.rand() < 0.02: #2% chance of change
+            change = np.random.normal(3.0, 1.0)
+        else:
+            change = np.random.normal(-0.02, 0.08)
+        hype = max(hype + change, 0.1)
         hype_series.append(hype)
 
     return hype_series 
@@ -36,6 +40,12 @@ def run_single_sim():
 
     for t in range(TIME_STEPS):
         hype = hype_series[t]
+        #add pos. feedback to hype
+        if len(price_series) >= 2:
+            price_momentum = (price_series[-1] - price_series[-2]) / price_series[-2]
+        else:
+            price_momentum = 0
+        hype += 12 * max(price_momentum, 0)
 
         n_buyers = np.random.poisson(ALPHA_BUYERS * hype)
 
@@ -58,7 +68,7 @@ def run_single_sim():
             hype_slope = 0
         else:
             hype_slope = hype_series[t] - hype_series[t-1]
-        sell_prob = SELL_BASE_PROB + 0.3 * max(0, -hype_slope)
+        sell_prob = SELL_BASE_PROB + 1.2 * max(0, -hype_slope)
 
         for h in holders:
             if np.random.rand() < sell_prob:
@@ -69,8 +79,13 @@ def run_single_sim():
         holders = remaining_holders
 
         net_flow = buy_volume - sell_volume
-        price_change = net_flow / max(liquidity, 1)
-        price *= max(1 + price_change * 0.001, 0.01)
+        impact = net_flow / max(liquidity, 1)
+        price *= np.exp(impact * 0.01)
+
+        #rug pull
+        if np.random.rand() < 0.002:
+            price *= np.random.uniform(0.05, 0.3)
+            liquidity *= 0.2
 
         liquidity += buy_volume - sell_volume
         liquidity = max(liquidity, 1_000)
