@@ -2,8 +2,8 @@ import numpy as np
 import pandas as pd
 import matplotlib.pyplot as plt
 
-TIME_STEPS = 300
-N_RUNS = 1000
+TIME_STEPS = 200
+N_RUNS = 500
 INITIAL_LIQUIDITY = 1_000
 INITIAL_PRICE = 1.0
 
