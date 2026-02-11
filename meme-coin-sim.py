@@ -45,9 +45,9 @@ def run_single_sim():
             price_momentum = (price_series[-1] - price_series[-2]) / price_series[-2]
         else:
             price_momentum = 0
-        hype += 12 * max(price_momentum, 0)
+        hype += 30 * max(price_momentum, 0)
 
-        n_buyers = np.random.poisson(ALPHA_BUYERS * hype)
+        n_buyers = np.random.poisson(ALPHA_BUYERS * hype*1.5)
 
         buy_volume = 0
         for _ in range(n_buyers):
@@ -80,7 +80,8 @@ def run_single_sim():
 
         net_flow = buy_volume - sell_volume
         impact = net_flow / max(liquidity, 1)
-        price *= np.exp(impact * 0.01)
+        #price impact can be chaneged between 0.01 and 0.15
+        price *= np.exp(impact * 0.08)
 
         #rug pull
         if np.random.rand() < 0.002:
@@ -88,7 +89,7 @@ def run_single_sim():
             liquidity *= 0.2
 
         liquidity += buy_volume - sell_volume
-        liquidity = max(liquidity, 1_000)
+        liquidity = max(liquidity, 50)
 
         price_series.append(price)
 
@@ -115,10 +116,11 @@ print("Monte Carlo results")
 print("-------------------")
 print(f"Runs: {N_RUNS}")
 print(f"Median peak multiple: {np.median(all_peaks):.2f}x")
+print(f"Max peak multiple: {np.max(all_peaks):.2f}x")
+print(f"95th percentile peak multiple: {np.percentile(all_peaks, 95):.2f}x")
 print(f"Mean final return: {np.mean(final_returns)*100:.2f}%")
 print(f"Median final return: {np.median(final_returns)*100:.2f}%")
 print(f"% profitable runs: {(np.array(final_returns) > 0).mean()*100:.1f}%")
-
 
 plt.hist(final_returns, bins=50)
 plt.axvline(0, color="red", linestyle="--")
