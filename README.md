@@ -27,10 +27,10 @@
     OR <br />
     python3 ./meme-coin-sim.py <br />
 Examples of running script with base params. : <br />
-![command line calling python3 to run script as sudo](https://github.com/williamnoblejones-prog/meme-coin-sim/blob/main/montCarloCryptoCMD.png) <br />
+![command line calling python3 to run script as sudo](https://github.com/williamnoblejones-prog/meme-coin-sim/blob/main/ExampleCMDLine.png) <br />
 (Example of running script with base params) <br />
-![graph representing results of script](https://github.com/williamnoblejones-prog/meme-coin-sim/blob/main/montCarloCrytoN1000.png) <br />
-(Example output of the above line, using N_RUNS = 1_000) <br />
+![graph representing results of script](https://github.com/williamnoblejones-prog/meme-coin-sim/blob/main/Figure_1.png) <br />
+![Example output of the above line, using N_RUNS = 1_000](https://github.com/williamnoblejones-prog/meme-coin-sim/blob/main/Figure_2.png) <br />
 
 ## Explination
 First, the model creates a value called hype, which represents how interested people are in the coin. This hype rises and falls in a somewhat random way, similar to trends on social media. When hype is high, more people want to buy. When hype starts to fall, more people choose to sell.
